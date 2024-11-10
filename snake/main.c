@@ -12,6 +12,8 @@
 #include "structs.h"
 #include "functions.h"
 
+/*#include "log.c"*/
+
 // Global Variables
 int width;
 int height;
@@ -19,7 +21,7 @@ int score = 0;
 enum BlockType *grid;
 struct Block* snake;
 struct Block* snakeHead;
-struct Block* apple = NULL;
+struct Block apple = {APPLE, 10, 10, NULL};
 enum Direction direction = RIGHT;
 bool running = true;
 
@@ -42,6 +44,10 @@ void initialize() {
 	keypad(stdscr, TRUE);   // Enable reading arrow keys
 	nodelay(stdscr, TRUE);  // Make getch() non-blocking
 	curs_set(0);            // Hide the cursor
+	
+	start_color();				// Enable color
+	init_pair(1, COLOR_BLACK, COLOR_RED);	// Set color pair for apple
+	init_pair(2, COLOR_BLACK, COLOR_GREEN);	// Set color pair for snake
 }
 
 void setupVariables() {
@@ -56,16 +62,13 @@ void setupVariables() {
 	
 	snake = getSnake();
 
-	apple = (struct Block*) malloc(sizeof(struct Block));
-	apple->type = APPLE;
-	apple->x = getRandomNumber(0, width - 1);
-	apple->y = getRandomNumber(0, height - 1);
+	generateApple();
+
 }
 
 void closeGame() {
 	running = false;
 	freeSnake();
-	free(apple);
 	free(grid);
 	endwin();  // Close the ncurses window
 }
@@ -77,7 +80,6 @@ void gameLoop() {
 			closeGame();
 		} else if (result != 0) {
 			score += result;
-			apple = NULL;
 		}
 	}
 }
@@ -90,14 +92,14 @@ int frame() {
 
 	listenForKeyPresses();
 
-	if (apple) {
-		mvprintw(apple->y, apple->x, "@");
-		grid[apple->y * width + apple->x] = APPLE;
-	}
+	attron(COLOR_PAIR(1));
+	mvprintw(apple.y, apple.x, " ");
+	grid[apple.y * width + apple.x] = APPLE;
 
 	struct Block* current = snake;
 	while (current != NULL) {
-		mvprintw(current->y, current->x, "#");
+		attron(COLOR_PAIR(2));
+		mvprintw(current->y, current->x, " ");
 		grid[current->y * width + current->x] = SNAKE;
 		current = current->next;
 	}
@@ -119,6 +121,7 @@ int frame() {
 			break;
 	}
 
+	attron(COLOR_PAIR(2));
 	mvprintw(height + 1, 0, "q: quit; Score: %d", score);
 
         refresh();
@@ -128,7 +131,7 @@ int frame() {
 	if (frameScore < 0) {
 		usleep(5000000);
 	}
-
+	
 	return frameScore;
 }
 
@@ -162,6 +165,7 @@ void listenForKeyPresses() {
 }
 
 void showGameOverMessage() {
+	attron(COLOR_PAIR(1));
 	mvprintw(height / 2, width / 2 - 8, "Game Over!");
 	mvprintw(height / 2 + 1, width / 2 - 8, "Score: %d", score);
 }
@@ -208,6 +212,7 @@ void moveSnake() {
 	current->x = move[0];
 	current->y = move[1];
 	free(move);
+
 }
 
 void extendSnake() {
@@ -223,6 +228,7 @@ void extendSnake() {
 
 	snakeHead->next = newHead;
 	snakeHead = newHead;
+
 }
 
 int* getWindowSize() {
@@ -239,25 +245,24 @@ enum BlockType checkForCollision() {
 	int x = move[0];
 	int y = move[1];
 	free(move);
-	
 	return grid[y * width + x];
 }
 
 struct Block* getSnake() {
 	struct Block* head = (struct Block*) malloc(sizeof(struct Block));
 	head->type = SNAKE;
-	head->x = 2;
-	head->y = 0;
+	head->x = 3;
+	head->y = 1;
 
 	struct Block* body = (struct Block*) malloc(sizeof(struct Block));
 	body->type = SNAKE;
-	body->x = 1;
-	body->y = 0;
+	body->x = 2;
+	body->y = 1;
 
 	struct Block* tail = (struct Block*) malloc(sizeof(struct Block));
 	tail->type = SNAKE;
-	tail->x = 0;
-	tail->y = 0;
+	tail->x = 1;
+	tail->y = 1;
 
 	head->next = NULL;
 	body->next = head;
@@ -268,23 +273,8 @@ struct Block* getSnake() {
 }
 
 void generateApple() {
-	if (apple == NULL) {
-		apple = (struct Block*) malloc(sizeof(struct Block));
-		apple->type = APPLE;
-	}
-
-	apple->x = getRandomNumber(0, width - 1);
-	apple->y = getRandomNumber(0, height - 1);
-
-	FILE *fptr;
-
-	// Create a file
-	fptr = fopen("apple.txt", "a");
-
-	fprintf(fptr, "%d %d\n", apple->x, apple->y);
-	
-	// Close the file
-	fclose(fptr);
+	apple.x = getRandomNumber(0, width - 1);
+	apple.y = getRandomNumber(0, height - 1);
 }
 
 int getRandomNumber(int min, int max) {
