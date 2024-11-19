@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STRUCTS_H_INCLUDED
+#define STRUCTS_H_INCLUDED
 
 #include "enums.h"
 
@@ -10,3 +11,5 @@ struct Block {
 
 	struct Block *next;
 };
+
+#endif // STRUCTS_H_INCLUDED

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENUMS_H_INCLUDED
+#define ENUMS_H_INCLUDED
 
 enum BlockType {
 	EMPTY = 0,
@@ -14,3 +15,4 @@ enum Direction {
 	RIGHT
 };
 
+#endif // ENUMS_H_INCLUDED
