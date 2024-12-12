@@ -1,6 +1,7 @@
 #include <stdio.h>
 int main() {
 	int smallest, current, pos = 0;
+	printf("Enter 6 numbers:\n");
 	for (int i = 0; i < 6; i++)
 	{
 		scanf("%d", &current);
@@ -10,5 +11,6 @@ int main() {
 			pos = i;
 		}
 	}
+	printf("Smallest number is %d at position %d", smallest, pos + 1);
 	return 0;
 }

@@ -4,7 +4,7 @@ int main() {
 	while (principal != 0) {
 		printf("Principal, Rate and Days [0 to exit]: ");
 		scanf("%f %f %f", &principal, &rate, &time);
-		printf("Interest: %f$", principal * rate * time / 365 / 100);
+		printf("Interest: %f$\n", principal * rate * time / 365 / 100);
 	}
 	return 0;
 }

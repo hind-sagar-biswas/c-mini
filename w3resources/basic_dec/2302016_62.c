@@ -7,7 +7,7 @@ int main() {
             sum += x % 10;
             x /= 10;
         }
-        printf("Sum of the digits of %hu: %hu", x, sum);
+        printf("Sum of the digits: %hu", sum);
     }
     else printf("Input must be less than 0");
     return 0;

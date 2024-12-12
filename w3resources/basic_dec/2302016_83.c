@@ -3,6 +3,7 @@ int count(int x, int digit);
 
 int main() {
 	int x, digit;
+	printf("Enter number and digit: ");
 	scanf("%d %d", &x, &digit);
 	printf("Number of %ds in %d is %d", digit, x, count(x, digit));
 	return 0;

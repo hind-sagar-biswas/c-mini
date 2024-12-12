@@ -2,7 +2,7 @@
 #include <stdio.h>
 int main() {
 	int x, sum, min = -1, max = -1, ctr = 0;
-	while (x >= 0) {
+	while (x > 0) {
 		scanf("%d", &x);
 		if (min == -1) {
 			if (x < 0) return printf("Input must be a positive integer!");

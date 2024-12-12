@@ -12,6 +12,6 @@ int main() {
 		else if (current > max) max = current;
 	}
 
-	printf("%f\n", max - min);
+	printf("Difference: %f\n", max - min);
 	return 0;
 }

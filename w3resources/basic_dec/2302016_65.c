@@ -15,7 +15,7 @@ int main() {
 	int count = 0;
 	for (int i = 1; i < 200; i++) {
 		if (!is_prime(i)) continue;
-		printf("%d ", i);
+		printf("%3d ", i);
 		count++;
 		if (!(count%20)) printf("\n");
 	}

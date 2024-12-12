@@ -1,14 +1,15 @@
 #include <stdio.h>
 int main() {
 	unsigned int max;
+	printf("Enter max number: ");
 	scanf("%u", &max);
 
-	for (int i = 1; i <= max; i++) {
+	for (int i = 0; i <= max; i++) {
 		int coof = 1;
-		printf("%4d ", coof);
+		printf("%2d: %6d ", i, coof);
 		for (int a = 1; a <= i; a++) {
 			coof = coof * (i - a + 1) / a;
-			printf("%4d ", coof);
+			printf("%6d ", coof);
 		}
 		printf("\n");
 	}
