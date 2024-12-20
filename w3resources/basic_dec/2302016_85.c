@@ -13,7 +13,7 @@ int main() {
 	return 0;
 }
 void int_to_roman(int n) {
-	int highest = 0, index = 0, length = 1;
+	int highest = 0;
 	for (int i = 0; i < 13; i++) {
 		if (n >= nums[i]) highest = i;
 		else break;
