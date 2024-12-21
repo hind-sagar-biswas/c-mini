@@ -22,6 +22,6 @@ int main( void ) {
 		else printf("|   %c %4d  %#x |" , char4 , char4 , char4);
 		printf("   %c %4d  %#x |   %c %4d  %#x |   %c %4d  %#x |   %c %4d  %#x |\n", 
 			char5 , char5 , char5 , char6 , char6 , char6 , char7 , char7 , char7 , char8 , char8 , char8  );
-		}
+	}
 	return 0; // Indicate successful execution of the program
 }

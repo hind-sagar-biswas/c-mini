@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <limits.h>
-#include <stdbool.h>
 int main(void) {
     printf("\n");
     printf("%-20s %-20s %-20s\n", "Type", "Bytes", "Range");
