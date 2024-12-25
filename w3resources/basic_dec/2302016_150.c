@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_SIZE 100
 #define IS_DIGIT(x) (x >= '0' && x <= '9')
@@ -40,6 +41,7 @@ void push(Stack *stack, Token *token);
 void enqueue(Queue *queue, Token *token);
 Token *dequeue(Queue *queue);
 int precedence(char op);
+int is_right_associative(char op);
 double calculate(double num1, double num2, char op);
 
 void infix_to_postfix(Stack *stack, Queue *queue);
@@ -55,7 +57,11 @@ int main() {
     queue.front = -1;
 
     printf("Enter a mathematical expression...\n>> ");
-    fgets(expression, 1025, stdin);
+    fgets(expression, sizeof(expression), stdin);
+    size_t len = strlen(expression);
+    if (len > 0 && expression[len - 1] == '\n') {
+	expression[len - 1] = '\0';
+    }
 
     infix_to_postfix(&stack, &queue);
     evaluate_postfix(&stack, &queue);
@@ -74,23 +80,13 @@ void infix_to_postfix(Stack *stack, Queue *queue) {
         Token *token = malloc(sizeof(Token));
 
         if (IS_DIGIT(expression[i]) || expression[i] == '.') {
-            double num = 0;
-            int decimal_place = 0;
-            while (IS_DIGIT(expression[i]) || expression[i] == '.') {
-                if (expression[i] == '.') decimal_place = 1;
-                else {
-                    num = num * 10 + (expression[i] - '0');
-                    if (decimal_place) decimal_place *= 10;
-                }
-                i++;
-            }
-            if (decimal_place) num /= decimal_place;
-            token->type = NUMBER;
-            token->value = num;
-            enqueue(queue, token);
-            i--; // Adjust i after number parsing
-            continue;
-        } else {
+	    char *endptr;
+	    token->type = NUMBER;
+	    token->value = strtod(&expression[i], &endptr);
+	    i = endptr - expression - 1; // Update the index
+	    enqueue(queue, token);
+	    continue;
+	} else {
             token->type = OPERATOR;
             token->op = expression[i];
         }
@@ -164,10 +160,16 @@ Token *dequeue(Queue *queue) {
 }
 
 int precedence(char op) {
-    if (op == '^') return 3;
-    if (op == '*' || op == '/') return 2;
-    if (op == '+' || op == '-') return 1;
-    return 0;
+    switch (op) {
+        case '^': return 3;
+        case '*': case '/': return 2;
+        case '+': case '-': return 1;
+        default: return 0;
+    }
+}
+
+int is_right_associative(char op) {
+    return op == '^';
 }
 
 void clear(Stack *stack, Queue *queue) {
