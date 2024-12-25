@@ -2,7 +2,7 @@
 #include <stdio.h>
 int main () 
 {
-	int x, y, sum_odd, sum_even;
+	int x, y, sum_odd = 0, sum_even = 0;
 	scanf("%d %d", &x, &y);
 	short int is_odd = x % 2;
 	for (int i = x; i <= y; i ++, is_odd = !is_odd) {

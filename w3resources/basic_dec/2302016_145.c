@@ -4,7 +4,8 @@ int main() {
     long sum = 0, n;
     printf("Enter number of sentences: ");
     scanf("%ld", &n);
-    for (int i = 0; i < n; i++) {
+    printf("Enter sentences:\n");
+    for (int i = 0; i <= n; i++) {
 	fgets(s, sizeof(s), stdin);
 	for (int i = 0; s[i] != '\0'; i++) {
 		if (s[i] > '0' && s[i] <= '9') sum += s[i] - '0';

@@ -3,7 +3,7 @@ int main ()
 {
     int x, y, sum = 0, ctr = 0;
     scanf("%d %d", &x, &y);
-    if (y > x) {
+    if (y < x) {
 	x = x + y;
 	y = x - y;
 	x = x - y;

@@ -15,6 +15,6 @@ int main()
 	printf("Input heights(integer values) of the top eight buildings:\n");
 	for (int i = 0; i < 8; i++) scanf("%d", &arr[i]);
 	insersion_sort(arr, 8);
-	printf("Heights of the top three building:\n%d\n%d\n%d\n", arr[0], arr[1], arr[2]);
+	printf("Heights of the top three building:\n%d\n%d\n%d\n", arr[7], arr[6], arr[5]);
 	return 0;
 }
