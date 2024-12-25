@@ -20,7 +20,7 @@ int main() {
 	scanf("%d %d %d", &arr[0], &arr[1], &arr[2]);
 	int n = sizeof(arr) / sizeof(arr[0]);
 	for (int i = 0; i < 3; i++) sorted[i] = arr[i];
-	insertion_sort(arr, n);
+	insertion_sort(sorted, n);
 	printf("Original array: ");
 	print_array(arr, n);
 	printf("Sorted array: ");
