@@ -310,32 +310,40 @@ void showGameOverMessage() {
 	attroff(COLOR_PAIR(1));
 }
 
-int* getNextMove() {
-	int* move = malloc(2 * sizeof(int));
-	move[0] = snakeHead->x;
-	move[1] = snakeHead->y;
-	switch (direction) {
-		case UP:
-			if (snakeHead->y > 0) move[1] -= 1;
-			else move[1] = height - 1;
-			break;
-		case DOWN:
-			if (snakeHead->y < height) move[1] += 1;
-			else move[1] = 0;
-			break;
-		case LEFT:
-			if (snakeHead->x > 0) move[0] -= 1;
-			else move[0] = width - 1;
-			break;
-		case RIGHT:
-			if (snakeHead->x < width) move[0] += 1;
-			else move[0] = 0;
-			break;
-		default:
-			break;
-	}
 
-	return move;
+int* getNextMove() {
+    int* move = malloc(2 * sizeof(int));
+    move[0] = snakeHead->x;
+    move[1] = snakeHead->y;
+    switch (direction) {
+        case UP:
+            if (snakeHead->y > 0)
+                move[1] -= 1;
+            else
+                move[1] = height - 1;
+            break;
+        case DOWN:
+            if (snakeHead->y < height - 1)  // Fix: use height - 1 here
+                move[1] += 1;
+            else
+                move[1] = 0;
+            break;
+        case LEFT:
+            if (snakeHead->x > 0)
+                move[0] -= 1;
+            else
+                move[0] = width - 1;
+            break;
+        case RIGHT:
+            if (snakeHead->x < width - 1)   // Fix: use width - 1 here
+                move[0] += 1;
+            else
+                move[0] = 0;
+            break;
+        default:
+            break;
+    }
+    return move;
 }
 
 void moveSnake() {
