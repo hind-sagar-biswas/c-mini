@@ -212,7 +212,6 @@ void closeGame() {
 
 		char *name = takeUserName();
 		addHighscore(score, name);
-		saveHighscores();
 		showHighscores();
 
 		sayGoodbye();
