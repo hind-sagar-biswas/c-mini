@@ -4,7 +4,7 @@
 #include "enums.h"
 
 struct Block* getSnake();
-enum BlockType checkForCollision();
+BlockType checkForCollision();
 
 int* getNextMove();
 int* getWindowSize();

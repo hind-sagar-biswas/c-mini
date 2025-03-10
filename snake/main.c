@@ -30,19 +30,23 @@
 
 #include "Log.c"
 
+#define MAX_HIGHSCORES 5
+#define HIGHSCORE_FILE "highscores.txt"
+
 // Global Variables
 int width;
 int height;
 int score = 0;
 
-enum BlockType *grid;
-enum Direction direction = RIGHT;
+BlockType *grid;
+Direction direction = RIGHT;
 
-struct Block* snake;
-struct Block* snakeHead;
-struct Block apple = {APPLE, 10, 10, NULL};
+Block* snake;
+Block* snakeHead;
+Block apple = {APPLE, 10, 10, NULL};
 
 bool running = true;
+bool paused = false;
 
 int main() {
 	atexit(handleExit);  // Register cleanup function
@@ -69,10 +73,13 @@ void initialize() {
 	nodelay(stdscr, TRUE);		// Make getch() non-blocking
 	curs_set(0);			// Hide the cursor
 
-	start_color();				// Enable color
-	init_pair(1, COLOR_BLACK, COLOR_RED);	// Set color pair for apple
-	init_pair(2, COLOR_BLACK, COLOR_GREEN);	// Set color pair for snake
+	if (has_colors()) {
+		start_color();				// Enable color
+		init_pair(1, COLOR_BLACK, COLOR_RED);	// Set color pair for apple
+		init_pair(2, COLOR_BLACK, COLOR_GREEN);	// Set color pair for snake
+	}
 }
+
 
 bool startMenu() {
 	char menuItems[2][13] = {" Start Game \0", "    Quit    \0"};
@@ -134,7 +141,7 @@ void setupVariables() {
 	width = wsize[0];
 	height = wsize[1] - 2;
 
-	grid = malloc(width * height * sizeof(enum BlockType));
+	grid = malloc(width * height * sizeof(BlockType));
 	for (int i = 0; i < width * height; i++) {
 		grid[i] = EMPTY;
 	}
@@ -151,6 +158,7 @@ void closeGame() {
 		freeSnake();
 		free(grid);
 		endwin();  // Close the ncurses window
+		exit(0);
 	}
 }
 
@@ -182,7 +190,7 @@ void sayGoodbye() {
 void gameLoop() {
 	while (running) {
 		int result = frame();
-		if (result == -1) {
+		if (result == -1 && running) {
 			closeGame();
 		} else if (result != 0) {
 			score += result;
@@ -193,59 +201,62 @@ void gameLoop() {
 int frame() {
     int frameScore = 0;  // Tracks score changes in this frame -> 0: No change; 1: Eat apple; -1: Game over
 
-    clear();  // Clear the screen for rendering the next frame
-    emptyGrid();  // Reset the grid
 
     listenForKeyPresses();  // Handle user input for direction changes
 
-    // Draw the apple
-    attron(COLOR_PAIR(1));  // Apply apple color
-    mvprintw(apple.y, apple.x, " ");
-    attroff(COLOR_PAIR(1));
+    if (!paused) {
+	erase();  // Clear the screen for rendering the next frame
+	emptyGrid();  // Reset the grid
+	// Draw the apple
+	attron(COLOR_PAIR(1));  // Apply apple color
+	mvprintw(apple.y, apple.x, " ");
+	attroff(COLOR_PAIR(1));
 
-    // Mark the apple position on the grid
-    grid[apple.y * width + apple.x] = APPLE;
+	// Mark the apple position on the grid
+	grid[apple.y * width + apple.x] = APPLE;
 
-    // Draw the snake
-    struct Block* current = snake;
-    while (current) {
-        attron(COLOR_PAIR(2));  // Apply snake color
-        if (current == snakeHead) {
-            mvprintw(current->y, current->x, "O");  // Draw the head
-        } else {
-            mvprintw(current->y, current->x, " ");
-        }
-        attroff(COLOR_PAIR(2));
+	// Draw the snake
+	Block* current = snake;
+	while (current) {
+	attron(COLOR_PAIR(2));  // Apply snake color
+	if (current == snakeHead) {
+	    mvprintw(current->y, current->x, "O");  // Draw the head
+	} else {
+	    mvprintw(current->y, current->x, " ");
+	}
+	attroff(COLOR_PAIR(2));
 
-        // Mark the snake position on the grid
-        grid[current->y * width + current->x] = SNAKE;
+	// Mark the snake position on the grid
+	grid[current->y * width + current->x] = SNAKE;
 
-        current = current->next;
+	current = current->next;
+	}
+
+	// Check for collisions and handle accordingly
+	BlockType block = checkForCollision();
+	switch (block) {
+	case EMPTY:
+	    moveSnake();  // Continue moving
+	    break;
+	case APPLE:
+	    extendSnake();  // Grow the snake
+	    generateApple();  // Spawn a new apple
+	    frameScore = 1;  // Increase the score
+	    break;
+	default:  // Collision with the snake itself or a wall
+	    showGameOverMessage();  // Display game-over screen
+	    frameScore = -1;
+	    break;
+	}
+
+	// Display the current score
+	attron(COLOR_PAIR(2));
+	mvprintw(height + 1, 0, "q: quit; p: pause/resume; Score: %d", score);
+	attroff(COLOR_PAIR(2));
+
+	wnoutrefresh(stdscr);
+	doupdate();  // Render the updated frame
     }
-
-    // Check for collisions and handle accordingly
-    enum BlockType block = checkForCollision();
-    switch (block) {
-        case EMPTY:
-            moveSnake();  // Continue moving
-            break;
-        case APPLE:
-            extendSnake();  // Grow the snake
-            generateApple();  // Spawn a new apple
-            frameScore = 1;  // Increase the score
-            break;
-        default:  // Collision with the snake itself or a wall
-            showGameOverMessage();  // Display game-over screen
-            frameScore = -1;
-            break;
-    }
-
-    // Display the current score
-    attron(COLOR_PAIR(2));
-    mvprintw(height + 1, 0, "q: quit; Score: %d", score);
-    attroff(COLOR_PAIR(2));
-
-    refresh();  // Render the updated frame
     usleep(100000);  // Delay for smooth game speed
 
     // Pause briefly on game-over
@@ -278,6 +289,9 @@ void listenForKeyPresses() {
 		if (direction != LEFT) {
 			direction = RIGHT;
 		}
+		break;
+	    case 'p':  // Pause game if 'p' is pressed else unpause
+		paused = !paused;
 		break;
             case 'q':  // Quit game if 'q' is pressed
                 closeGame();
@@ -348,8 +362,8 @@ int* getNextMove() {
 
 void moveSnake() {
     // Move each segment of the snake to the position of the segment ahead of it
-    struct Block* current = snake;
-    struct Block* next = current->next;
+    Block* current = snake;
+    Block* next = current->next;
 
     while (next) {
         // Update the current segment's position to match the next segment
@@ -371,7 +385,7 @@ void moveSnake() {
 
 void extendSnake() {
     // Allocate a new segment for the snake
-    struct Block* newHead = (struct Block*) malloc(sizeof(struct Block));
+    Block* newHead = (Block*) malloc(sizeof(Block));
     newHead->type = SNAKE;
 
     // Position the new segment at the next move location
@@ -395,7 +409,7 @@ int* getWindowSize() {
 	return wsize;
 }
 
-enum BlockType checkForCollision() {
+BlockType checkForCollision() {
 	int* move = getNextMove();
 	int x = move[0];
 	int y = move[1];
@@ -403,18 +417,18 @@ enum BlockType checkForCollision() {
 	return grid[y * width + x];
 }
 
-struct Block* getSnake() {
-	struct Block* head = (struct Block*) malloc(sizeof(struct Block));
+Block* getSnake() {
+	Block* head = (Block*) malloc(sizeof(Block));
 	head->type = SNAKE;
 	head->x = 3;
 	head->y = 1;
 
-	struct Block* body = (struct Block*) malloc(sizeof(struct Block));
+	Block* body = (Block*) malloc(sizeof(Block));
 	body->type = SNAKE;
 	body->x = 2;
 	body->y = 1;
 
-	struct Block* tail = (struct Block*) malloc(sizeof(struct Block));
+	Block* tail = (Block*) malloc(sizeof(Block));
 	tail->type = SNAKE;
 	tail->x = 1;
 	tail->y = 1;
@@ -448,9 +462,9 @@ void emptyGrid() {
 }
 
 void freeSnake() {
-	struct Block* current = snake;
+	Block* current = snake;
 	while (current) {
-		struct Block* next = current->next;
+		Block* next = current->next;
 		free(current);
 		current = next;
 	}
