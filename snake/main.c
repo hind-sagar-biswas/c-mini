@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include <unistd.h>
+#include <form.h>
 
 #include "enums.h"
 #include "structs.h"
@@ -42,6 +43,9 @@ Direction direction = RIGHT;
 Block* snake;
 Block* snakeHead;
 Block apple = {APPLE, 10, 10, NULL};
+
+FIELD *field[2];
+FORM *my_form;
 
 bool running = true;
 bool paused = false;
@@ -79,6 +83,58 @@ void initialize() {
 	}
 }
 
+char* takeUserName() {
+	erase();
+	int ch;
+	
+	// Create a field with 1 row and 20 columns at row 4, col 10
+	field[0] = new_field(1, MAX_NAME_LENGTH, height / 2 + 1, width / 2 - MAX_NAME_LENGTH / 2 - 1, 0, 0);
+	field[1] = NULL;  // End of fields
+
+	// Set field options and appearance
+	set_field_back(field[0], A_UNDERLINE);
+	field_opts_off(field[0], O_AUTOSKIP);
+
+	// Create the form and post it
+	my_form = new_form(field);
+	post_form(my_form);
+	mvprintw(height / 2 - 1, width / 2 - 8, "Enter your name:");
+	refresh();
+
+	 // Loop to process user input until F1 is pressed
+	while ((ch = getch()) != KEY_DOWN) {
+		switch(ch) {
+			case KEY_BACKSPACE:
+			case 127:
+				form_driver(my_form, REQ_DEL_PREV);
+				break;
+			case KEY_LEFT:
+				form_driver(my_form, REQ_PREV_CHAR);
+				break;
+			case KEY_RIGHT:
+				form_driver(my_form, REQ_NEXT_CHAR);
+				break;
+			default:
+				form_driver(my_form, ch);
+				break;
+		}
+		refresh();
+	}
+	
+	// Commit the input by moving out and back into the field
+	form_driver(my_form, REQ_NEXT_FIELD);
+	form_driver(my_form, REQ_PREV_FIELD);
+	
+	// Retrieve the input from the field
+	char *raw_input = field_buffer(field[0], 0);
+	// Trim trailing whitespace
+	char *end = raw_input + strlen(raw_input) - 1;
+	while(end > raw_input && (*end == ' ' || *end == '\t')) {
+	    *end = '\0';
+	    end--;
+	}
+	return raw_input;
+}
 
 bool startMenu() {
 	char menuItems[2][13] = {" Start Game \0", "    Quit    \0"};
@@ -154,13 +210,17 @@ void closeGame() {
 	if (running) {
 		running = false;
 
-		addHighscore(score, "shinigami");
+		char *name = takeUserName();
+		addHighscore(score, name);
 		saveHighscores();
 		showHighscores();
 
 		sayGoodbye();
 		freeSnake();
 
+		unpost_form(my_form);
+		free_form(my_form);
+		free_field(field[0]);
 		free(grid);
 		endwin();  // Close the ncurses window
 		exit(0);

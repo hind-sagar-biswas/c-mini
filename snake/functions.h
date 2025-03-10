@@ -6,6 +6,8 @@
 struct Block* getSnake();
 BlockType checkForCollision();
 
+char* takeUserInput();
+
 int* getNextMove();
 int* getWindowSize();
 int getRandomNumber(int min, int max);
