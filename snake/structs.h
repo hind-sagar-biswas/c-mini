@@ -1,6 +1,6 @@
 #ifndef STRUCTS_H_INCLUDED
 #define STRUCTS_H_INCLUDED
-#define MAX_NAME_LENGTH 50
+#define MAX_NAME_LENGTH 15
 
 #include <time.h>
 #include "enums.h"

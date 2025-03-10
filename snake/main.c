@@ -28,10 +28,8 @@
 #include "structs.h"
 #include "functions.h"
 
+#include "Highscore.c"
 #include "Log.c"
-
-#define MAX_HIGHSCORES 5
-#define HIGHSCORE_FILE "highscores.txt"
 
 // Global Variables
 int width;
@@ -66,6 +64,7 @@ int main() {
 void initialize() {
 	srand(time(NULL));		// Seed the random number generator
 	setupVariables();		// Initialize global variables
+	loadHighscores();		// Load highscores
 	initscr();			// Initialize the ncurses screen
 	noecho();			// Don't echo input to the screen
 	cbreak();			// Disable line buffering, pass key presses directly
@@ -154,8 +153,14 @@ void setupVariables() {
 void closeGame() {
 	if (running) {
 		running = false;
+
+		addHighscore(score, "shinigami");
+		saveHighscores();
+		showHighscores();
+
 		sayGoodbye();
 		freeSnake();
+
 		free(grid);
 		endwin();  // Close the ncurses window
 		exit(0);
@@ -166,7 +171,7 @@ void sayGoodbye() {
 	clear();
 
 	int y = (height / 2) - 4;
-    int x = (width / 2) - 23;
+	int x = (width / 2) - 23;
 
 	char message[8][45] = {
 		" _____                 _  ______            ",
@@ -298,6 +303,42 @@ void listenForKeyPresses() {
                 return;
         }
 }
+
+void showHighscores() {
+	int y = (height / 2) - 4;
+	int x = (width / 2) - 5;
+	char message[6][49] = {
+		"    __  ___       __                            ",
+		"   / / / (_)___ _/ /_  ______________  ________ ",
+		" / /_/ / / __ `/ __ \\/ ___/ ___/ __ \\/ ___/ _ \\,",
+		" / __  / / /_/ / / / (__  ) /__/ /_/ / /  /  __/",
+		"/_/ /_/_/\\__, /_/ /_/____/\\___/\\____/_/   \\___/ ",
+		"        /____/                                  ",
+	};
+
+	erase();
+
+	for (int j = 0; j < 6; j++) {
+		int x = (width / 2) - 28;
+		mvprintw(y+j, x, "%s", message[j]);
+	}
+
+	attron(A_STANDOUT);
+	x = (width / 2) - (56 / 2) - 5;
+	mvprintw(y + 8, x, "                                                          ");
+	for (int i = 0; i < numHighscores; i++) {
+		char timeStr[26];
+		ctime_r(&highscores[i].timestamp, timeStr);
+		timeStr[strcspn(timeStr, "\n")] = '\0';  // Remove newline
+		mvprintw(y + i + 9, x, " %02d. %-*s : %03d pts [%s] ", i + 1, MAX_NAME_LENGTH, highscores[i].name, highscores[i].score, timeStr);
+	}
+	mvprintw(y + 8 + numHighscores, x, "                                                          ");
+	attroff(A_STANDOUT);
+
+	refresh();
+	usleep(5000000);
+}
+
 
 void showGameOverMessage() {
 	int y = (height / 2) - 4;
