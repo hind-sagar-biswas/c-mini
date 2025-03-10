@@ -86,6 +86,8 @@ void initialize() {
 char* takeUserName() {
 	erase();
 	int ch;
+	char prompt[] = "Congratulations! You got into the ranking. Please enter your name:";
+	char instruction[] = "Press DOWN ARROW to submit your name.";
 	
 	// Create a field with 1 row and 20 columns at row 4, col 10
 	field[0] = new_field(1, MAX_NAME_LENGTH, height / 2 + 1, width / 2 - MAX_NAME_LENGTH / 2 - 1, 0, 0);
@@ -98,7 +100,8 @@ char* takeUserName() {
 	// Create the form and post it
 	my_form = new_form(field);
 	post_form(my_form);
-	mvprintw(height / 2 - 1, width / 2 - 8, "Enter your name:");
+	mvprintw(height / 2 - 1, width / 2 - strlen(prompt) / 2, "%s", prompt);
+	mvprintw(height / 2 + 3, width / 2 - strlen(instruction) / 2, "%s", instruction);
 	refresh();
 
 	 // Loop to process user input until F1 is pressed
@@ -210,8 +213,10 @@ void closeGame() {
 	if (running) {
 		running = false;
 
-		char *name = takeUserName();
-		addHighscore(score, name);
+		if (numHighscores < MAX_HIGHSCORES || score > highscores[numHighscores - 1].score) {	
+			char *name = takeUserName();
+			addHighscore(score, name);
+		}
 		showHighscores();
 
 		sayGoodbye();
@@ -364,12 +369,12 @@ void listenForKeyPresses() {
 }
 
 void showHighscores() {
-	int y = (height / 2) - 4;
-	int x = (width / 2) - 5;
+	int y = (height / 2) - 6 - numHighscores / 2;
+	int x = width / 2 - 49 / 2;
 	char message[6][49] = {
 		"    __  ___       __                            ",
 		"   / / / (_)___ _/ /_  ______________  ________ ",
-		" / /_/ / / __ `/ __ \\/ ___/ ___/ __ \\/ ___/ _ \\,",
+		"  / /_/ / / __ `/ __ \\/ ___/ ___/ __ \\/ ___/ _ \\",
 		" / __  / / /_/ / / / (__  ) /__/ /_/ / /  /  __/",
 		"/_/ /_/_/\\__, /_/ /_/____/\\___/\\____/_/   \\___/ ",
 		"        /____/                                  ",
@@ -378,20 +383,19 @@ void showHighscores() {
 	erase();
 
 	for (int j = 0; j < 6; j++) {
-		int x = (width / 2) - 28;
 		mvprintw(y+j, x, "%s", message[j]);
 	}
 
 	attron(A_STANDOUT);
-	x = (width / 2) - (56 / 2) - 5;
+	x = (width / 2) - (58 / 2);
 	mvprintw(y + 8, x, "                                                          ");
+	char timeStr[26];
 	for (int i = 0; i < numHighscores; i++) {
-		char timeStr[26];
 		ctime_r(&highscores[i].timestamp, timeStr);
 		timeStr[strcspn(timeStr, "\n")] = '\0';  // Remove newline
 		mvprintw(y + i + 9, x, " %02d. %-*s : %03d pts [%s] ", i + 1, MAX_NAME_LENGTH, highscores[i].name, highscores[i].score, timeStr);
 	}
-	mvprintw(y + 8 + numHighscores, x, "                                                          ");
+	mvprintw(y + 9 + numHighscores, x, "                                                          ");
 	attroff(A_STANDOUT);
 
 	refresh();
@@ -401,7 +405,7 @@ void showHighscores() {
 
 void showGameOverMessage() {
 	int y = (height / 2) - 4;
-	int x = (width / 2) - 5;
+	int x = (width / 2) - 57 / 2;
 
 	char message[6][57] = {
 		"   _____                         ____                 _ ",
@@ -415,7 +419,6 @@ void showGameOverMessage() {
 	attron(COLOR_PAIR(1));
 
 	for (int j = 0; j < 6; j++) {
-		int x = (width / 2) - 28;
 		mvprintw(y+j, x, "%s", message[j]);
 	}
 
