@@ -99,7 +99,7 @@ void refresh_prompt(void) {
 		final_cwd[sizeof(final_cwd) - 1] = '\0';
 	}
 
-	snprintf(prompt, PROMPT_LENGTH, "%s㉿%s - [%s] %s ", user, hostname, final_cwd, PROMPT_SYMBOL);
+	snprintf(prompt, PROMPT_LENGTH, "\033[95;1m%s㉿%s [\033[97;1m%s\033[95;1m] %s \033[0m", user, hostname, final_cwd, PROMPT_SYMBOL);
 }
 
 int tokenize(char *line, char **args, int max_args) {

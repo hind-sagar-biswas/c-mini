@@ -1,6 +1,8 @@
 #ifndef __SHELL_H
 #define __SHELL_H
 
+#include <stdbool.h>
+
 #define PROMPT_SYMBOL "$"
 #define HISTORY_LENGTH 1024
 #define MAX_CMD_LENGTH 4096

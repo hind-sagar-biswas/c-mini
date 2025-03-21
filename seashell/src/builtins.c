@@ -1,9 +1,9 @@
-
-#include "./builtins.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "./builtins.h"
+#include "./shell.h"
 
 char CWD[PATH_LENGTH];
 
@@ -55,6 +55,7 @@ void builtin_impl_cd(char **args, size_t n_args) {
     exit(1);
   }
   refresh_cwd();
+  refresh_prompt();
 }
 
 void builtin_impl_pwd(char **args, size_t n_args) {
