@@ -15,7 +15,6 @@ void run_shell(void);
 void initialize_shell(bool silent);
 void refresh_prompt(void);
 
-int tokenize(char* line, char **args, int max_args);
 int excecute(char *cmd, char **args);
 
 #endif /* __SHELL_H */

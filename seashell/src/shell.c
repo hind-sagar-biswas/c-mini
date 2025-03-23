@@ -13,6 +13,10 @@
 #include "./builtins.h"
 #include "./decoratives.h"
 
+#include "./seal/lexer.h"
+#include "./seal/parser.h"
+#include "./seal/seal.h"
+
 char prompt[PROMPT_LENGTH];
 
 int main(int argc, char *argv[]) {
@@ -50,24 +54,32 @@ void initialize_shell(bool silent) {
 
 void run_shell(void) {
 	char *line;
-	char *args[MAX_ARGS];
+	CmdToken *tokens[MAX_ARGS];
+	Command *commands[MAX_COMMANDS];
 	
 	while (true) {
 		fprintf(stdout, "%s\n", prompt);
 		if ((line = linenoise(PROMPT_SYMBOL)) == NULL) break;
 
-		int args_read = tokenize(line, args, MAX_ARGS);
+		int args_read = prepare_commands(line, tokens, commands, MAX_COMMANDS);
 
 		if (args_read == 0) {
 			linenoiseFree(line);
 			continue;
 		}
 
-		char *cmd = args[0];
-		char **cmd_args = args;
+		int c = 0;
+		while (true) {
+			char *cmd = commands[c]->command;
+			char **cmd_args = commands[c]->args;
 
-		if (is_builtin(cmd)) execute_builtin(cmd, (cmd_args + 1), args_read - 1);
-		else excecute(cmd, cmd_args);
+			if (is_builtin(cmd)) execute_builtin(cmd, (cmd_args + 1), args_read - 1);
+			else excecute(cmd, cmd_args);
+			
+			if (commands[c]->flow == FLOW_END) break;
+			else c++;
+		}
+		free_prepared_commands(tokens, commands);
 
 		linenoiseHistoryAdd(line);
 		linenoiseFree(line);
@@ -103,17 +115,6 @@ void refresh_prompt(void) {
 	}
 
 	snprintf(prompt, PROMPT_LENGTH, "\033[92m┌──(\033[95;1m%s㉿%s\033[92m)-[\033[97;1m%s\033[92m]\033[0m", user, hostname, final_cwd);
-}
-
-int tokenize(char *line, char **args, int max_args) {
-	int i = 0;
-	char *token = strtok(line, TOKEN_SEPARATOR);
-	while (token != NULL && i < (max_args - 1)) {
-		args[i++] = token;
-		token = strtok(NULL, TOKEN_SEPARATOR);
-	}
-	args[i] = NULL;
-	return i;
 }
 
 int excecute(char *cmd, char **args) {
