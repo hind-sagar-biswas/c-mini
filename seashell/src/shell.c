@@ -52,7 +52,10 @@ void run_shell(void) {
 	char *line;
 	char *args[MAX_ARGS];
 	
-	while ((line = linenoise(prompt)) != NULL) {
+	while (true) {
+		fprintf(stdout, "%s\n", prompt);
+		if ((line = linenoise(PROMPT_SYMBOL)) == NULL) break;
+
 		int args_read = tokenize(line, args, MAX_ARGS);
 
 		if (args_read == 0) {
@@ -99,7 +102,7 @@ void refresh_prompt(void) {
 		final_cwd[sizeof(final_cwd) - 1] = '\0';
 	}
 
-	snprintf(prompt, PROMPT_LENGTH, "\033[95;1m%s㉿%s [\033[97;1m%s\033[95;1m] %s \033[0m", user, hostname, final_cwd, PROMPT_SYMBOL);
+	snprintf(prompt, PROMPT_LENGTH, "\033[92m┌──(\033[95;1m%s㉿%s\033[92m)-[\033[97;1m%s\033[92m]\033[0m", user, hostname, final_cwd);
 }
 
 int tokenize(char *line, char **args, int max_args) {

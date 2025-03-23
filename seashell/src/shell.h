@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define PROMPT_SYMBOL "$"
+#define PROMPT_SYMBOL "\033[92m└─\033[95;1m$\033[0m "
 #define HISTORY_LENGTH 1024
 #define MAX_CMD_LENGTH 4096
 #define HOSTNAME_LENGTH 256
