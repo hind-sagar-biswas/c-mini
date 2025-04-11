@@ -5,19 +5,19 @@
 
 #include "./lexer.h"
 
-bool is_separator(char c) { return c == ' ' || c == '\t'; }
+static bool is_separator(char c) { return c == ' ' || c == '\t'; }
 
-bool is_alone(char prev, char next) {
+static bool is_alone(char prev, char next) {
 	if (!is_separator(prev)) return false;
 	if (!is_separator(next) && next != '\0') return false;
 	return true;
 }
 
-bool is_pipe(char prev, char c, char next) { return is_alone(prev, next) && c == '|'; }
-bool is_redir(char prev, char c, char next) { return is_alone(prev, next) && c == '>'; }
-bool is_concat(char prev, char c1, char c2, char next) { return is_alone(prev, next) && c1 == '&' && c2 == '&'; }
+static bool is_pipe(char prev, char c, char next) { return is_alone(prev, next) && c == '|'; }
+static bool is_redir(char prev, char c, char next) { return is_alone(prev, next) && c == '>'; }
+static bool is_concat(char prev, char c1, char c2, char next) { return is_alone(prev, next) && c1 == '&' && c2 == '&'; }
 
-void make_cmd_token(CmdToken **tokens, int *i, Tag tag, const char *value) {
+static void make_cmd_token(CmdToken **tokens, int *i, Tag tag, const char *value) {
 	tokens[*i] = malloc(sizeof(CmdToken));
 	if (tokens[*i] == NULL) {
 		fprintf(stderr, "ERROR: malloc failed\n");
@@ -71,12 +71,10 @@ int command_lexer(char *line, CmdToken **tokens, int max_tokens) {
 	}
 	int token_len = c - start;
 	// Allocate a new string that includes the quotes.
-	char *qstr = malloc(token_len + 3); // opening, closing quotes and null terminator
+	char *qstr = malloc(token_len + 1); // opening, closing quotes and null terminator
 	if (!qstr) { perror("malloc"); exit(EXIT_FAILURE); }
-	qstr[0] = '"';
-	memcpy(qstr + 1, line + start, token_len);
-	qstr[token_len + 1] = '"';
-	qstr[token_len + 2] = '\0';
+	memcpy(qstr, line + start, token_len);
+	qstr[token_len + 1] = '\0';
 	make_cmd_token(tokens, &i, TAG_STRING_ARG, qstr);
 	free(qstr);
 	prev = '"';

@@ -4,7 +4,7 @@
 
 #include "./parser.h"
 
-bool is_terminal_token(CmdToken *token) {
+static bool is_terminal_token(CmdToken *token) {
 	return token == NULL || token->tag == TAG_PIPE || token->tag == TAG_CONCAT || token->tag == TAG_REDIRECT;
 }
 
@@ -52,7 +52,6 @@ int parse_cmd_tokens(CmdToken **tokens, Command **commands) {
     i++;
   }
   commands[i] = NULL;
-  fprintf(stdout, "Completed Parsing!\n");
   return i;
 }
 

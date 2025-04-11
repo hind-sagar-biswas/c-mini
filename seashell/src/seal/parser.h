@@ -19,10 +19,8 @@ typedef struct Command {
 	CommandFlow flow;
 } Command;
 
-bool is_terminal_token(CmdToken *token);
 
 int parse_cmd_tokens(CmdToken **tokens, Command **commands);
-
 void free_commands(Command **commands);
 
 #endif /* __SEAL_PARSER	_H */

@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include <stdio.h>
 #include "seal.h"
 
 int prepare_commands(char *line, CmdToken **tokens, Command **commands, int limit) {

@@ -16,14 +16,14 @@ typedef enum Builtin {
 int is_builtin(char *cmd);
 
 void refresh_cwd(void);
-void builtin_impl_cd(char **args, size_t n_args);
-void builtin_impl_cls(char **args, size_t n_args);
-void builtin_impl_pwd(char **args, size_t n_args);
-void builtin_impl_exit(char **args, size_t n_args);
+static void builtin_impl_cd(char **args, size_t n_args);
+static void builtin_impl_cls(char **args, size_t n_args);
+static void builtin_impl_pwd(char **args, size_t n_args);
+static void builtin_impl_exit(char **args, size_t n_args);
 void execute_builtin(char *cmd, char **args, size_t n_args);
 
 char* get_cwd(void);
 
-Builtin builtin_code(char *cmd);
+static Builtin builtin_code(char *cmd);
 
 #endif /* __BUILTINS_H */

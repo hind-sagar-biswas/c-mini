@@ -1,6 +1,7 @@
 #ifndef __SHELL_H
 #define __SHELL_H
 
+#include "seal/parser.h"
 #include <stdbool.h>
 
 #define PROMPT_SYMBOL "\033[92m└─\033[95;1m$\033[0m "
@@ -16,5 +17,6 @@ void initialize_shell(bool silent);
 void refresh_prompt(void);
 
 int excecute(char *cmd, char **args);
+int execute_piped_commands(Command **commands, int count);
 
 #endif /* __SHELL_H */
