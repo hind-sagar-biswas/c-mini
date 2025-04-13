@@ -15,13 +15,13 @@
   |___/\___|\__,_|___/_| |_|\___|_|_|
 ```
 
-![Project Language](https://img.shields.io/static/v1?label=language&message=C&color=grey)
+![Project Language](https://img.shields.io/static/v1?label=language&message=C&color=blue)
 ![Project Type](https://img.shields.io/static/v1?label=type&message=application&color=red)
-<!--![Stable Version](https://img.shields.io/static/v1?label=stable-version&message=v0.4.2&color=brightgreen)-->
-<!--![Latest Version](https://img.shields.io/static/v1?label=latest-version&message=v0.4.2&color=yellow)-->
 ![Maintained](https://img.shields.io/static/v1?label=maintained&message=yes&color=green)
 ![License](https://img.shields.io/static/v1?label=license&message=MIT&color=orange)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/hind-sagar-biswas/c-mini/pulls)
+<!--![Stable Version](https://img.shields.io/static/v1?label=stable-version&message=v0.4.2&color=brightgreen)-->
+<!--![Latest Version](https://img.shields.io/static/v1?label=latest-version&message=v0.4.2&color=yellow)-->
 
 A mini shell made in C programming language.
 
