@@ -17,6 +17,22 @@
 
 A mini shell made in C programming language.
 
+## Installation
+
+To build the shell, run `./install.sh` in the root directory.
+
+```
+chmod +x install.sh
+./install.sh
+```
+
+To run directly after installation:
+
+```
+chmod +x install.sh
+./install.sh --run
+```
+
 ## Usage
 
 ```
@@ -42,3 +58,6 @@ seashell [options] <..files>
       unalias <name>            Remove an alias.
       exit                      Exit the shell.
  
+## RC File
+
+The rc file is a text file that contains commands that are executed when the shell is run. The file is read from the given path, or the default path `~/.cslrc` if no path is given.
