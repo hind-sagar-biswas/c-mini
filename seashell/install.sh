@@ -10,8 +10,12 @@ files=(
     "./src/builtins/alias.c"
     "./src/seal/lexer.c"
     "./src/seal/parser.c"
+    "./src/seal/mathexp.c"
     "./src/seal/seal.c"
     "./lib/linenoise/linenoise.c"
+)
+linkers=(
+    "-lm"
 )
 
 mkdir -p lib
@@ -25,7 +29,7 @@ if [ ! -d "lib/linenoise" ]; then
 fi
 
 echo "Building $name..."
-gcc "${files[@]}" -o ./bin/$name
+gcc "${files[@]}" "${linkers[@]}" -o ./bin/$name
 
 echo "Making $name executable..."
 chmod +x ./bin/$name

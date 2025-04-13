@@ -6,6 +6,7 @@
 #include "./alias.h"
 #include "./../shell.h"
 #include "./../decoratives.h"
+#include "./../seal/mathexp.h"
 
 char CWD[PATH_LENGTH];
 
@@ -13,11 +14,13 @@ static void (*BUILTIN_TABLE[]) (char** args, size_t n_args) = {
   [CD] = builtin_impl_cd,
   [PWD] = builtin_impl_pwd,
   [CLS] = builtin_impl_cls,
+  [MATH] = builtin_impl_math,
   [INFO] = builtin_impl_info,
   [EXIT] = builtin_impl_exit,
   [ALIAS] = builtin_impl_alias,
   [UNALIAS] = builtin_impl_unalias,
 };
+
 
 char* get_cwd(void) {
   return CWD;
@@ -57,6 +60,40 @@ static void builtin_impl_pwd(char** args, size_t n_args) {
 
 static void builtin_impl_cls(char** args, size_t n_args) {
   system("clear");
+}
+
+static void builtin_impl_math(char** args, size_t n_args) {
+  if (n_args == 0) {
+    fprintf(stderr, "math: Too few arguments\n");
+    return;
+  }
+  
+  size_t total_length = 0;
+  for (size_t i = 0; i < n_args; i++) {
+    total_length += strlen(args[i]) + 1;
+    /*fprintf(stdout, "[%zu] %s\n", i, args[i]);*/
+  }
+
+  /*fprintf(stdout, "%zu\n", total_length);*/
+  
+
+  char* expression = malloc(total_length + 1);
+  if (!expression) {
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+  expression[0] = '\0';
+  for (size_t i = 0; i < n_args; i++) {
+    strcat(expression, args[i]);
+    if (i < n_args - 1)
+      strcat(expression, " ");
+  }
+
+
+  int result = evaluate_math_expression(expression);
+  fprintf(stdout, "%d\n", result);
+
+  free(expression);
 }
 
 static void builtin_impl_info(char** args, size_t n_args) {
@@ -132,6 +169,9 @@ static Builtin builtin_code(char* cmd) {
   }
   else if (!strncmp(cmd, "info", 4)) {
     return INFO;
+  }
+  else if (!strncmp(cmd, "=", 1)) {
+    return MATH;
   }
   else {
     return INVALID;

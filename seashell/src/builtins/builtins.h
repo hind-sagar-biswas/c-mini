@@ -8,6 +8,7 @@ typedef enum Builtin {
 	CD,
 	PWD,
 	CLS,
+	MATH,
 	ALIAS,
 	UNALIAS,
 	EXIT,
@@ -21,6 +22,7 @@ void refresh_cwd(void);
 static void builtin_impl_cd(char **args, size_t n_args);
 static void builtin_impl_cls(char **args, size_t n_args);
 static void builtin_impl_pwd(char **args, size_t n_args);
+static void builtin_impl_math(char **args, size_t n_args);
 static void builtin_impl_info(char **args, size_t n_args);
 static void builtin_impl_exit(char **args, size_t n_args);
 static void builtin_impl_alias(char **args, size_t n_args);
