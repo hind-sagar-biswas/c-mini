@@ -2,8 +2,7 @@
 #define __BUILTINS_H
 
 #include <unistd.h>
-
-#define PATH_LENGTH 4096
+#include "./../constants.h"
 
 typedef enum Builtin {
 	CD,

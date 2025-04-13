@@ -2,8 +2,7 @@
 #define __SEAL_PARSER_H
 
 #include "lexer.h"
-
-#define MAX_COMMANDS 1024
+#include "./../constants.h"
 
 typedef enum CommandFlow {
 	FLOW_PIPE,
