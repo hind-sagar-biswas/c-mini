@@ -1,0 +1,33 @@
+alias ls ls --color=auto
+#alias dir dir --color=auto
+#alias vdir vdir --color=auto
+
+alias grep grep --color=auto
+alias fgrep fgrep --color=auto
+alias egrep egrep --color=auto
+alias diff diff --color=auto
+alias ip ip --color=auto
+
+alias la ls -lA
+alias l ls -CF
+alias a sudo apt
+alias s sudo
+alias art php artisan
+alias sc source ~/.zshrc
+alias v nvim
+alias sv sudo nvim
+alias tmux zellij
+alias cls clear
+alias mkdir mkdir -p
+alias cp cp -i
+alias mv mv -i
+alias rm rm -i
+alias mrun mvn clean compile exec:java
+alias py python
+alias mysql mariadb
+alias pbcopy xsel --input --clipboard
+alias pbpaste xsel --output --clipboard
+alias sys systemctl
+alias ssys sudo systemctlinfo
+
+fastfetch

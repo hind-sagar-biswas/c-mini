@@ -19,10 +19,34 @@ char* banner[] = {
   NULL,
 };
 
+HelpMessage options[] = {
+  {"-h, --help", "Show this message, then exit."},
+  {"-v, --version", "Show the version number, then exit."},
+  {"-i, --info", "Run the shell with welcome message `info`."},
+  {"-r, --rc <file>", "Run the shell with the given rc file. Defaults to ~/.cslrc"},
+  {"..files", "Executes the given files in order, then exits."},
+};
+
+HelpMessage commands[] = {
+  {"cd <path>", "Change the current working directory."},
+  {"pwd", "Print the current working directory."},
+  {"cls", "Clear the screen."},
+  {"info", "Print information about the shell."},
+  {"alias", "List all aliases."},
+  {"alias <name>", "Print the value of an alias."},
+  {"alias <name> <command>", "Create an alias."},
+  {"unalias <name>", "Remove an alias."},
+  {"exit", "Exit the shell."},
+};
+
 void print_banner(void) {
   for (int i = 0; banner[i] != NULL; i++) {
     printf(" %s\n", banner[i]);
   }
+}
+
+void print_help_message(HelpMessage* message) {
+  printf("  %-25s %s\n", message->label, message->message);
 }
 
 void welcome_message(void) {
@@ -35,20 +59,11 @@ void welcome_message(void) {
 }
 
 void print_help(void) {
-  printf("\nUsage: seashell [-h] [-v] [-s] <..files>\n");
+  printf("\nUsage: seashell [options] <..files>\n");
+
   printf("Options:\n");
-  printf("\t-h, --help\t- Show this message, then exit.\n");
-  printf("\t-v, --version\t- Show the version number, then exit.\n");
-  printf("\t-i, --info\t- Run %s with welcome message `info`.\n", APP_NAME);
-  printf("\t..files\t\t- Execute the given files.\n");
+  for (int i = 0; i < 4; i++) print_help_message(&options[i]);
+
   printf("Commands:\n");
-  printf("\tcd <path>\t\t- Change the current working directory.\n");
-  printf("\tpwd\t\t\t- Print the current working directory.\n");
-  printf("\tcls\t\t\t- Clear the screen.\n");
-  printf("\tinfo\t\t\t- Show information about the shell.\n");
-  printf("\talias\t\t\t- Show aliases.\n");
-  printf("\talias <name>\t\t- Show a specific alias.\n");
-  printf("\talias <name> <command>\t- Add or update an alias.\n");
-  printf("\tunalias <name>\t\t- Remove an alias.\n");
-  printf("\texit\t\t\t- Exit the shell.");
+  for (int i = 0; i < 9; i++) print_help_message(&commands[i]);
 }

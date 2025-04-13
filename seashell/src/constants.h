@@ -2,7 +2,7 @@
 #define __CONSTANTS_H
 
 #define APP_NAME "Sea-(C)-shell"
-#define APP_VERSION "0.4.2"
+#define APP_VERSION "0.4.3"
 
 #define AUTHOR_NAME "Hind Biswas"
 #define AUTHOR_EMAIL "hindsbhk@gmail.com; ug2302016@cse.pstu.ac.bd"

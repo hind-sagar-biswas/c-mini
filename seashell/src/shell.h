@@ -8,7 +8,7 @@
 
 void run_shell(void);
 void run_command(char *line);
-void initialize_shell(bool silent);
+void initialize_shell(bool silent, bool custom_rc);
 void refresh_prompt(void);
 
 int excecute(char *cmd, char **args);

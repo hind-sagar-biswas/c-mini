@@ -22,10 +22,13 @@
 
 char prompt[PROMPT_LENGTH];
 char *files[MAX_FILES];
+char rc_path[PATH_LENGTH] = ".cslrc";
 
 int main(int argc, char* argv[]) {
 	bool silent = true;
 	bool as_shell = true;
+	bool custom_rc = false;
+
 	int file_count = 0;
 
 	if (argc > 1) {
@@ -39,6 +42,11 @@ int main(int argc, char* argv[]) {
 				exit(0);
 			}
 			else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--info") == 0) silent = false;
+			else if (strcmp(argv[i], "-r") == 0 || strcmp(argv[i], "--rc") == 0) {
+				custom_rc = true;
+				if (i + 1 < argc) strcpy(rc_path, argv[++i]);
+				else fprintf(stderr, "No path provided for rc file\n");
+			}
 			else {
 				as_shell = false;
 				files[file_count++] = argv[i];
@@ -51,13 +59,14 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	initialize_shell(silent);
+	initialize_shell(silent, custom_rc);
 	run_shell();
 	return 0;
 }
 
-void initialize_shell(bool silent) {
-	load_rc_file(run_command);
+void initialize_shell(bool silent, bool custom_rc) {
+
+	load_rc_file(run_command, rc_path, custom_rc);
 
 	if (!silent) welcome_message();
 

@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "loadrc.h"
 #include "builtins/runfile.h"
 
 
-void load_rc_file(void (*run_command)(char *)) {
+void load_rc_file(void (*run_command)(char *), const char *filename, bool custom) {
   char *home = getenv("HOME");
   if (!home) {
     fprintf(stderr, "HOME environment variable not set.\n");
@@ -12,7 +13,8 @@ void load_rc_file(void (*run_command)(char *)) {
   }
 
   char rc_path[PATH_LENGTH];
-  snprintf(rc_path, sizeof(rc_path), "%s/.cslrc", home);
+  if (custom) snprintf(rc_path, sizeof(rc_path), "%s", filename);
+  else snprintf(rc_path, sizeof(rc_path), "%s/%s", home, filename);
 
   execute_file(run_command, rc_path, true);
 }
