@@ -5,6 +5,7 @@
 #include "./builtins.h"
 #include "./alias.h"
 #include "./../shell.h"
+#include "./../decoratives.h"
 
 char CWD[PATH_LENGTH];
 
@@ -12,6 +13,7 @@ static void (*BUILTIN_TABLE[]) (char** args, size_t n_args) = {
   [CD] = builtin_impl_cd,
   [PWD] = builtin_impl_pwd,
   [CLS] = builtin_impl_cls,
+  [INFO] = builtin_impl_info,
   [EXIT] = builtin_impl_exit,
   [ALIAS] = builtin_impl_alias,
   [UNALIAS] = builtin_impl_unalias,
@@ -55,6 +57,10 @@ static void builtin_impl_pwd(char** args, size_t n_args) {
 
 static void builtin_impl_cls(char** args, size_t n_args) {
   system("clear");
+}
+
+static void builtin_impl_info(char** args, size_t n_args) {
+  welcome_message();
 }
 
 static void builtin_impl_alias(char** args, size_t n_args) {
@@ -123,6 +129,9 @@ static Builtin builtin_code(char* cmd) {
   }
   else if (!strncmp(cmd, "unalias", 7)) {
     return UNALIAS;
+  }
+  else if (!strncmp(cmd, "info", 4)) {
+    return INFO;
   }
   else {
     return INVALID;

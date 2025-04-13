@@ -11,9 +11,11 @@ fi
 
 files=(
     "./src/shell.c"
-    "./src/builtins/builtins.c"
-    "./src/builtins/alias.c"
+    "./src/loadrc.c"
     "./src/decoratives.c"
+    "./src/builtins/builtins.c"
+    "./src/builtins/runfile.c"
+    "./src/builtins/alias.c"
     "./src/seal/lexer.c"
     "./src/seal/parser.c"
     "./src/seal/seal.c"

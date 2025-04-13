@@ -10,6 +10,7 @@
 #include "./../lib/linenoise/linenoise.h"
 
 #include "./shell.h"
+#include "./loadrc.h"
 #include "./builtins/builtins.h"
 #include "./builtins/alias.h"
 #include "./decoratives.h"
@@ -21,7 +22,7 @@
 char prompt[PROMPT_LENGTH];
 
 int main(int argc, char* argv[]) {
-	bool silent = false;
+	bool silent = true;
 
 	if (argc > 1) {
 		for (int i = 1; i < argc; i++) {
@@ -33,7 +34,7 @@ int main(int argc, char* argv[]) {
 				printf("Seashell v%s\n", VERSION);
 				exit(0);
 			}
-			else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--silent") == 0) silent = true;
+			else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--info") == 0) silent = false;
 		}
 	}
 
@@ -43,6 +44,7 @@ int main(int argc, char* argv[]) {
 }
 
 void initialize_shell(bool silent) {
+	load_rc_file(run_command);
 
 	if (!silent) welcome_message();
 

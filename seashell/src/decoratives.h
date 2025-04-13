@@ -1,7 +1,7 @@
 #ifndef __DECORATIVES_H
 #define __DECORATIVES_H
 
-#define VERSION "0.0.1"
+#include "constants.h"
 
 void print_help(void);
 void print_banner(void);

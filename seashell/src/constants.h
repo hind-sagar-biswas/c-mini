@@ -1,6 +1,7 @@
 #ifndef __CONSTANTS_H
 #define __CONSTANTS_H
 
+#define VERSION "0.4.1"
 #define PROMPT_SYMBOL "\033[92m└─\033[95;1m$\033[0m "
 #define PATH_LENGTH 4096
 #define HISTORY_LENGTH 1024

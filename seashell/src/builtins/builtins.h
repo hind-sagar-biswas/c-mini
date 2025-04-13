@@ -11,6 +11,7 @@ typedef enum Builtin {
 	ALIAS,
 	UNALIAS,
 	EXIT,
+	INFO,
 	INVALID
 } Builtin;
 
@@ -20,6 +21,7 @@ void refresh_cwd(void);
 static void builtin_impl_cd(char **args, size_t n_args);
 static void builtin_impl_cls(char **args, size_t n_args);
 static void builtin_impl_pwd(char **args, size_t n_args);
+static void builtin_impl_info(char **args, size_t n_args);
 static void builtin_impl_exit(char **args, size_t n_args);
 static void builtin_impl_alias(char **args, size_t n_args);
 static void builtin_impl_unalias(char **args, size_t n_args);
