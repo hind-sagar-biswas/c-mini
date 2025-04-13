@@ -112,8 +112,11 @@ void run_command(char* line) {
 			/*	fprintf(stdout, "%d %s\n", i, commands[c]->args[i]);*/
 			/*}*/
 			if (commands[c]->type == CMD_BUILTIN) execute_builtin(cmd, (cmd_args + 1), commands[c]->n_args - 1);
-			else if (commands[c]->type == CMD_ALIAS) execute_alias(run_command, cmd, cmd_args + 1, commands[c]->n_args - 1);
-			else excecute(cmd, cmd_args);
+			else if (commands[c]->type == CMD_ALIAS) {
+				int depth = execute_alias(run_command, cmd, cmd_args + 1, commands[c]->n_args - 1);
+				if (depth > 0) execute(cmd, cmd_args);
+			}
+			else execute(cmd, cmd_args);
 		}
 
 		if (commands[c]->flow == FLOW_END) break;
@@ -168,7 +171,7 @@ void refresh_prompt(void) {
 	snprintf(prompt, PROMPT_LENGTH, "\033[92m┌──(\033[95;1m%s㉿%s\033[92m)-[\033[97;1m%s\033[92m]\033[0m", user, hostname, final_cwd);
 }
 
-int excecute(char* cmd, char** args) {
+int execute(char* cmd, char** args) {
 	int status;
 	pid_t pid = fork();
 
@@ -246,8 +249,13 @@ int execute_piped_commands(Command** commands, int pipe_count) {
 				exit(EXIT_SUCCESS);
 			}
 			else if (commands[i]->type == CMD_ALIAS) {
-				execute_alias(run_command, commands[i]->command, commands[i]->args + 1, commands[i]->n_args - 1);
-				exit(EXIT_SUCCESS);
+				int depth = execute_alias(run_command, commands[i]->command, commands[i]->args + 1, commands[i]->n_args - 1);
+				if (depth == 0) exit(EXIT_SUCCESS);
+				else {
+					execvp(commands[i]->command, commands[i]->args);
+					perror("execvp");
+					exit(EXIT_FAILURE);
+				}
 			}
 			else {
 				execvp(commands[i]->command, commands[i]->args);

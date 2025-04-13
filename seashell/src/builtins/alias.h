@@ -18,6 +18,6 @@ void print_aliases(void);
 void free_aliases(void);
 
 // execute alias function (takes run_command() function pointer, command, args, and n_args)
-void execute_alias(void (*run_command)(char *), char *command, char **args, int n_args);
+int execute_alias(void (*run_command)(char *), char *command, char **args, int n_args);
 
 #endif /* __BUILTIN_ALIAS	_H */

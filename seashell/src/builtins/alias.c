@@ -73,28 +73,36 @@ void print_aliases(void) {
     }
 }
 
-void execute_alias(void (*run_command)(char*), char* command, char** args, int n_args) {
+int execute_alias(void (*run_command)(char*), char* command, char** args, int n_args) {
+    static int alias_expansion_depth = 0;
+
+    if (alias_expansion_depth > 0) return alias_expansion_depth;
+
     /*fprintf(stdout, "Alias: %s\n", command);*/
 
-    char* alias_command = find_alias(command);
-    if (alias_command == NULL) return;
+    char* expanded = find_alias(command);
+    if (expanded == NULL) return 0;
 
-    // join alias_command and args to create a new command string
-    int total_length = strlen(alias_command) + 1; // add one for white space
+    // join expanded and args to create a new command string
+    int total_length = strlen(expanded) + 1; // add one for white space
     for (int i = 0; i < n_args; i++) total_length += strlen(args[i]) + 1; // add one for white space
 
     char* new_command = malloc(total_length * sizeof(char));
     if (!new_command) perror("malloc"), exit(EXIT_FAILURE);
 
-    strcpy(new_command, alias_command);
+    strcpy(new_command, expanded);
     for (int i = 0; i < n_args; i++) {
         strcat(new_command, " ");
         strcat(new_command, args[i]);
     }
     new_command[total_length - 1] = '\0';
 
+    alias_expansion_depth++;
     run_command(new_command);
+    alias_expansion_depth--;
     free(new_command);
+
+    return alias_expansion_depth;
 }
 
 void free_aliases(void) {
