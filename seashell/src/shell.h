@@ -13,6 +13,7 @@
 #define TOKEN_SEPARATOR " \t"
 
 void run_shell(void);
+void run_command(char *line);
 void initialize_shell(bool silent);
 void refresh_prompt(void);
 

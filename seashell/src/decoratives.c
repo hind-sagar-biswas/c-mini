@@ -2,7 +2,7 @@
 
 #include "./decoratives.h"
 
-char *banner[] = {
+char* banner[] = {
   "            _.---._",
   "        .'\"\".'/|\\`.\"\"'.",
   "       :  .' / | \\ `.  :",

@@ -12,11 +12,18 @@ typedef enum CommandFlow {
 	FLOW_END,
 } CommandFlow;
 
+typedef enum CommandType {
+	CMD_EXTERNAL,
+	CMD_BUILTIN,
+	CMD_ALIAS,
+} CommandType;
+
 typedef struct Command {
 	char *command;
 	char *args[MAX_COMMANDS];
 	int n_args;
 	CommandFlow flow;
+	CommandType type;
 } Command;
 
 

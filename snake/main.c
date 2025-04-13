@@ -104,7 +104,7 @@ char* takeUserName() {
 	mvprintw(height / 2 + 3, width / 2 - strlen(instruction) / 2, "%s", instruction);
 	refresh();
 
-	 // Loop to process user input until F1 is pressed
+	// Loop to process user input until F1 is pressed
 	while ((ch = getch()) != KEY_DOWN) {
 		switch(ch) {
 			case KEY_BACKSPACE:
