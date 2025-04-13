@@ -27,22 +27,28 @@ void print_banner(void) {
 
 void welcome_message(void) {
   print_banner();
-  printf("Welcome to Sea-(C)-shell v%s\n", VERSION);
+  printf("Welcome to %s v%s\n", APP_NAME, APP_VERSION);
   printf("\n");
-  printf("AUTHOR:\tHind Biswas\n");
-  printf("EMAIL:\thindsbhk@gmail.com; ug2302016@cse.pstu.ac.bd\n");
+  printf("AUTHOR:\t%s\n", AUTHOR_NAME);
+  printf("EMAIL:\t%s\n", AUTHOR_EMAIL);
   printf("\n");
 }
 
 void print_help(void) {
-  printf("usage: seashell [-h] [-v] [-s]\n");
+  printf("\nUsage: seashell [-h] [-v] [-s] <..files>\n");
   printf("Options:\n");
   printf("\t-h, --help\t- Show this message, then exit.\n");
   printf("\t-v, --version\t- Show the version number, then exit.\n");
-  printf("\t-s, --silent\t- Run Sea-(C)-shell without welcome message.\n");
+  printf("\t-i, --info\t- Run %s with welcome message `info`.\n", APP_NAME);
+  printf("\t..files\t\t- Execute the given files.\n");
   printf("Commands:\n");
-  printf("\tcd <path>\t- Change the current working directory.\n");
-  printf("\tpwd\t\t- Print the current working directory.\n");
-  printf("\tcls\t\t- Clear the screen.\n");
-  printf("\texit\t\t- Exit the shell.");
+  printf("\tcd <path>\t\t- Change the current working directory.\n");
+  printf("\tpwd\t\t\t- Print the current working directory.\n");
+  printf("\tcls\t\t\t- Clear the screen.\n");
+  printf("\tinfo\t\t\t- Show information about the shell.\n");
+  printf("\talias\t\t\t- Show aliases.\n");
+  printf("\talias <name>\t\t- Show a specific alias.\n");
+  printf("\talias <name> <command>\t- Add or update an alias.\n");
+  printf("\tunalias <name>\t\t- Remove an alias.\n");
+  printf("\texit\t\t\t- Exit the shell.");
 }

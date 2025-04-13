@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 				exit(0);
 			}
 			else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-				printf("Seashell v%s\n", VERSION);
+				printf("%s v%s\n", APP_NAME, APP_VERSION);
 				exit(0);
 			}
 			else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--info") == 0) silent = false;

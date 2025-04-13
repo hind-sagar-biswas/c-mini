@@ -1,7 +1,12 @@
 #ifndef __CONSTANTS_H
 #define __CONSTANTS_H
 
-#define VERSION "0.4.2"
+#define APP_NAME "Sea-(C)-shell"
+#define APP_VERSION "0.4.2"
+
+#define AUTHOR_NAME "Hind Biswas"
+#define AUTHOR_EMAIL "hindsbhk@gmail.com; ug2302016@cse.pstu.ac.bd"
+
 #define PROMPT_SYMBOL "\033[92m└─\033[95;1m$\033[0m "
 #define PATH_LENGTH 4096
 #define HISTORY_LENGTH 1024
