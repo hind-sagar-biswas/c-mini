@@ -12,6 +12,7 @@
 #include "./shell.h"
 #include "./loadrc.h"
 #include "./builtins/builtins.h"
+#include "./builtins/runfile.h"
 #include "./builtins/alias.h"
 #include "./decoratives.h"
 
@@ -20,9 +21,12 @@
 #include "./seal/seal.h"
 
 char prompt[PROMPT_LENGTH];
+char *files[MAX_FILES];
 
 int main(int argc, char* argv[]) {
 	bool silent = true;
+	bool as_shell = true;
+	int file_count = 0;
 
 	if (argc > 1) {
 		for (int i = 1; i < argc; i++) {
@@ -35,7 +39,16 @@ int main(int argc, char* argv[]) {
 				exit(0);
 			}
 			else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--info") == 0) silent = false;
+			else {
+				as_shell = false;
+				files[file_count++] = argv[i];
+			}
 		}
+	}
+
+	if (!as_shell) {
+		for (int i = 0; i < file_count; i++) execute_file(run_command, files[i], silent);
+		return 0;
 	}
 
 	initialize_shell(silent);

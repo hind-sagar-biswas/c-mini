@@ -31,3 +31,4 @@ void execute_file(void (*run_command)(char *), char *filepath, bool silent) {
 
     fclose(fp);
 }
+
