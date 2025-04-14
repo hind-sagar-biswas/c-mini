@@ -33,9 +33,10 @@ gcc "${files[@]}" "${linkers[@]}" -o ./bin/$name
 
 echo "Making $name executable..."
 chmod +x ./bin/$name
-
-./bin/$name --version
 echo "Installed into ./bin as $name"
+
+echo ""
+./bin/$name --version
 
 if [[ $* == *--run* ]]; then
     echo "Running seashell..."
@@ -44,4 +45,5 @@ else
     echo "To run seashell, use ./bin/$name"
     echo "To uninstall, delete the ./bin directory"
     echo "To run seashell with a specific rc file, use ./bin/$name --rc <file>"
+    echo "To see help, use ./bin/$name --help or ./bin/$name -h"
 fi

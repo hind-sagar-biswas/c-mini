@@ -36,6 +36,7 @@ HelpMessage commands[] = {
   {"alias <name>", "Print the value of an alias."},
   {"alias <name> <command>", "Create an alias."},
   {"unalias <name>", "Remove an alias."},
+  {"= <expression>", "Evaluate a mathematical expression."},
   {"exit", "Exit the shell."},
 };
 

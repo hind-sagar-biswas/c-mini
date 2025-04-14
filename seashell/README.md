@@ -20,8 +20,8 @@
 ![Maintained](https://img.shields.io/static/v1?label=maintained&message=yes&color=green)
 ![License](https://img.shields.io/static/v1?label=license&message=MIT&color=orange)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/hind-sagar-biswas/c-mini/pulls)
+![Latest Version](https://img.shields.io/static/v1?label=latest-version&message=v0.5.1&color=yellow)
 <!--![Stable Version](https://img.shields.io/static/v1?label=stable-version&message=v0.4.2&color=brightgreen)-->
-<!--![Latest Version](https://img.shields.io/static/v1?label=latest-version&message=v0.4.2&color=yellow)-->
 
 A mini shell made in C programming language.
 
@@ -65,6 +65,7 @@ seashell [options] <..files>
       alias <name> <command>    Create an alias.
       unalias <name>            Remove an alias.
       exit                      Exit the shell.
+      = <expression>            Evaluate a mathematical expression.
  
 ## RC File
 
