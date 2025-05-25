@@ -1,4 +1,3 @@
-#include <string.h>
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
@@ -12,7 +11,7 @@ void LOG(const char* source, const char* message)
     rawTime += 6 * 3600;
 
     // Convert to a broken-down time (UTC+6 offset)
-    struct tm *timeInfo = gmtime(&rawTime);
+    struct tm* timeInfo = gmtime(&rawTime);
 
     // Get hundredths of a second
     struct timeval tv;
@@ -26,7 +25,7 @@ void LOG(const char* source, const char* message)
     printf("[%s:%02d][%s]: %s\n", formattedTime, hundredths, source, message);
 
     // Open the log file in append mode
-    FILE *logFile = fopen("log.txt", "a");
+    FILE* logFile = fopen("log.txt", "a");
     if (logFile == NULL) {
         perror("Unable to open log file");
         return;

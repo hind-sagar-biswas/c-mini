@@ -6,6 +6,7 @@ typedef enum {
 	APPLE = 1,
 	SNAKE = 2,
 	WALL = 3,
+	BANANA = 4,
 } BlockType;
 
 typedef enum {
