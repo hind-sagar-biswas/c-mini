@@ -8,9 +8,9 @@
 // A dynamic snake game written in C using ncurses library.
 
 // OS Requirement: Linux
-// Libraries Required: ncurses (sudo apt install libncurses5-dev libncursesw5-dev)
-// Build Command: ./build.sh
-// Run Command: ./bin/snake
+// Libraries Required: ncurses (sudo apt install libncurses-dev)
+// Build Command:	./build.sh
+// Build & Run Command:	./build.sh --run
 
 
 // Check if the OS is Windows
