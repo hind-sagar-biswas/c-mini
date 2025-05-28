@@ -8,7 +8,7 @@ files=(
 	"./src/log.c"
 )
 linkers=(
-	"-lncurses"
+	"-lncursesw"
 	"-lform"
 	"-lpthread"
 )

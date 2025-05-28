@@ -1,6 +1,8 @@
 #ifndef MAIN_H_INCLUDED
 #define MAIN_H_INCLUDED
 
+#define SNAKE_SQUARE 1
+
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +14,10 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <form.h>
+#include <locale.h>
 
+#include "highscore.h"
+#include "messages.h"
 #include "enums.h"
 #include "structs.h"
 

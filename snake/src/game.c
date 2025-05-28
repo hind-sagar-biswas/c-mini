@@ -1,7 +1,4 @@
-// Includes
 #include "game.h"
-#include "highscore.h"
-#include "messages.h"
 
 // Global Variables
 int width;
@@ -43,6 +40,7 @@ int main() {
 // Function Definitions
 
 void initialize() {
+	setlocale(LC_ALL, "");			// Set locale
 	srand(time(NULL));			// Seed the random number generator
 	setupVariables();			// Initialize global variables
 	loadHighscores(&numHighscores);		// Load highscores
@@ -55,9 +53,9 @@ void initialize() {
 
 	if (has_colors()) {
 		start_color();				// Enable color
-		init_pair(1, COLOR_BLACK, COLOR_RED);	// Set color pair for apple
-		init_pair(2, COLOR_BLACK, COLOR_GREEN);	// Set color pair for snake
-		init_pair(3, COLOR_BLACK, COLOR_YELLOW);// Set color pair for banana
+		init_pair(1, COLOR_RED, COLOR_BLACK);	// Set color pair for apple
+		init_pair(2, COLOR_GREEN, COLOR_BLACK);	// Set color pair for snake
+		init_pair(3, COLOR_YELLOW, COLOR_BLACK);// Set color pair for banana
 	}
 }
 
@@ -216,7 +214,7 @@ int frame() {
 		emptyGrid();		// Reset the grid
 		// Draw the apple
 		attron(COLOR_PAIR(1));	// Apply apple color
-		mvprintw(apple.y, apple.x, " ");
+		mvprintw(apple.y, apple.x, "");
 		attroff(COLOR_PAIR(1));
 
 		// Mark the apple position on the grid
@@ -224,7 +222,7 @@ int frame() {
 		if (!banana.is_hidden) {
 			grid[banana.y * width + banana.x] = BANANA;
 			attron(COLOR_PAIR(3));	// Apply apple color
-			mvprintw(banana.y, banana.x, " ");
+			mvprintw(banana.y, banana.x, "󱨎");
 			attroff(COLOR_PAIR(3));
 		}
 
@@ -233,10 +231,18 @@ int frame() {
 		while (current) {
 			attron(COLOR_PAIR(2));  // Apply snake color
 			if (current == snakeHead) {
-				mvprintw(current->y, current->x, "O");  // Draw the head
+				#ifdef SNAKE_SQUARE
+				mvprintw(current->y, current->x, "");  // Draw the head
+				#else
+				mvprintw(current->y, current->x, "");  // Draw the head
+				#endif
 			}
 			else {
-				mvprintw(current->y, current->x, " ");
+				#ifdef SNAKE_SQUARE
+				mvprintw(current->y, current->x, "");
+				#else
+				mvprintw(current->y, current->x, "");
+				#endif
 			}
 			attroff(COLOR_PAIR(2));
 
