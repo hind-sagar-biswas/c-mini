@@ -501,6 +501,6 @@ void freeSnake() {
 
 void handleExit() {
 	closeGame();
-	printf("[INFO]    Game exited safely.\n");
+	printf("[INFO] Game exited safely.\n");
 }
 
