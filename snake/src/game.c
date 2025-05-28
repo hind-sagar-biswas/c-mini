@@ -63,7 +63,7 @@ char* takeUserName() {
 	erase();
 	int ch;
 	char prompt[] = "Congratulations! You got into the ranking. Please enter your name:";
-	char instruction[] = "Press DOWN ARROW to submit your name.";
+	char instruction[] = "Press DOWN ARROW 󰜯 to submit your name.";
 
 	// Create a field with 1 row and 20 columns at row 4, col 10
 	field[0] = new_field(1, MAX_NAME_LENGTH, height / 2 + 1, width / 2 - MAX_NAME_LENGTH / 2 - 1, 0, 0);
@@ -118,10 +118,10 @@ char* takeUserName() {
 bool startMenu() {
 	showTitleMessage(height, width);
 
-	char menuItems[2][13] = { " Start Game \0", "    Quit    \0" };
+	char menuItems[2][18] = { "  Start Game  \0", "     Quit     \0" };
 	int ch, i = 0;
 	int y = (height / 2);
-	int x = (width / 2) - 6;
+	int x = (width / 2) - 9;
 
 	for (int i = 0; i < 2; i++) {
 		if (i == 0) attron(A_STANDOUT); // highlights the first item.
@@ -161,9 +161,7 @@ void setupVariables() {
 	height = wsize[1] - 2;
 
 	grid = malloc(width * height * sizeof(BlockType));
-	for (int i = 0; i < width * height; i++) {
-		grid[i] = EMPTY;
-	}
+	for (int i = 0; i < width * height; i++) grid[i] = EMPTY;
 
 	snake = getSnake();
 
@@ -287,9 +285,7 @@ int frame() {
 	usleep(100000);  // Delay for smooth game speed
 
 	// Pause briefly on game-over
-	if (frameScore < 0) {
-		usleep(1500000);
-	}
+	if (frameScore < 0) usleep(1500000);
 
 	return frameScore;
 }
@@ -298,24 +294,16 @@ void listenForKeyPresses() {
 	int ch = getch();
 	switch (ch) {
 	case KEY_UP:
-		if (direction != DOWN) {
-			direction = UP;
-		}
+		if (direction != DOWN) direction = UP;
 		break;
 	case KEY_DOWN:
-		if (direction != UP) {
-			direction = DOWN;
-		}
+		if (direction != UP) direction = DOWN;
 		break;
 	case KEY_LEFT:
-		if (direction != RIGHT) {
-			direction = LEFT;
-		}
+		if (direction != RIGHT) direction = LEFT;
 		break;
 	case KEY_RIGHT:
-		if (direction != LEFT) {
-			direction = RIGHT;
-		}
+		if (direction != LEFT) direction = RIGHT;
 		break;
 	case 'p':  // Pause game if 'p' is pressed else unpause
 		paused = !paused;
@@ -333,28 +321,20 @@ int* getNextMove() {
 	move[1] = snakeHead->y;
 	switch (direction) {
 	case UP:
-		if (snakeHead->y > 0)
-			move[1] -= 1;
-		else
-			move[1] = height - 1;
+		if (snakeHead->y > 0) move[1] -= 1;
+		else move[1] = height - 1;
 		break;
 	case DOWN:
-		if (snakeHead->y < height - 1)  // Fix: use height - 1 here
-			move[1] += 1;
-		else
-			move[1] = 0;
+		if (snakeHead->y < height - 1)  move[1] += 1;
+		else move[1] = 0;
 		break;
 	case LEFT:
-		if (snakeHead->x > 0)
-			move[0] -= 1;
-		else
-			move[0] = width - 1;
+		if (snakeHead->x > 0) move[0] -= 1;
+		else move[0] = width - 1;
 		break;
 	case RIGHT:
-		if (snakeHead->x < width - 1)   // Fix: use width - 1 here
-			move[0] += 1;
-		else
-			move[0] = 0;
+		if (snakeHead->x < width - 1) move[0] += 1;
+		else move[0] = 0;
 		break;
 	default:
 		break;
@@ -459,7 +439,6 @@ void generateBanana() {
 		banana.x = getRandomNumber(0, width - 1);
 		banana.y = getRandomNumber(0, height - 1);
 
-
 		// Ensure the banana does not spawn on the snake or the apple
 	} while (grid[banana.y * width + banana.x] != EMPTY);
 	banana.is_hidden = false;
@@ -485,9 +464,7 @@ int getRandomNumber(int min, int max) {
 }
 
 void emptyGrid() {
-	for (int i = 0; i < width * height; i++) {
-		grid[i] = EMPTY;
-	}
+	for (int i = 0; i < width * height; i++) grid[i] = EMPTY;
 }
 
 void freeSnake() {
